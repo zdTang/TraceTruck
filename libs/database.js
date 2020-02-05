@@ -1,3 +1,10 @@
+/*====================================================================
+Discription: An instance of DB--mySql
+FileName: Database.js
+Project: Karmax
+Programmer: Zhendong Tang (Mike)
+Date      : Jan 30, 2020
+=====================================================================*/
 const mysql=require('mysql');
 const co=require('co-mysql');
 const config=require('../config');

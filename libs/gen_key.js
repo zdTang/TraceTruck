@@ -1,3 +1,10 @@
+/*====================================================================
+Discription: Generate key for encrypto cookies
+FileName: gen_key.js
+Project: Karmax
+Programmer: Zhendong Tang (Mike)
+Date      : Jan 30, 2020
+=====================================================================*/
 const fs=require('fs');
 const KEY_LEN=1024;
 const KEY_COUNT=2048;

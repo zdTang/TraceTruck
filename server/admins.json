@@ -1,6 +1,9 @@
 
 
 [
-    {"username":"tang",
-    "password":"86b63e62701b4332ae34b10a0fa3ae8a"}
+    {
+        "_comment":"This file used to store ROOT ACCOUNT, the password is MD5",
+        "username":"tang",
+        "password":"86b63e62701b4332ae34b10a0fa3ae8a"
+    }
 ]

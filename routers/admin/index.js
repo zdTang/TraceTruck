@@ -1,3 +1,10 @@
+/*====================================================================
+Discription: subrouter---admin
+FileName:index.js
+Project: Karmax
+Programmer: Zhendong Tang (Mike)
+Date      : Jan 30, 2020
+=====================================================================*/
 const Router=require('koa-router');
 const fs=require('await-fs');
 const path=require('path');

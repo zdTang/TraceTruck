@@ -1,3 +1,10 @@
+/*====================================================================
+Discription: The  kernel of the Node.js server
+FileName: server.js
+Project: Karmax
+Programmer: Zhendong Tang (Mike)
+Date      : Jan 30, 2020
+=====================================================================*/
 const Koa=require('koa');
 const Router=require('koa-router');
 const static=require('../routers/static')
