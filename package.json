@@ -1,0 +1,26 @@
+{
+  "name": "karmax",
+  "version": "1.0.0",
+  "description": "",
+  "main": "config.js",
+  "dependencies": {
+    "await-fs": "^1.0.0",
+    "co-mysql": "^1.0.0",
+    "koa": "^2.11.0",
+    "koa-ejs": "^4.3.0",
+    "koa-better-body": "^3.3.1",
+    "koa-router": "^8.0.6",
+    "koa-session": "^5.13.1",
+    "mysql": "^2.18.1",
+    "noa": "^0.0.3",
+    "nodemon": "^2.0.2"
+  },
+  "devDependencies": {
+    "koa-static": "^5.0.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
