@@ -1,6 +1,6 @@
 /*====================================================================
-Discription: The  kernel of the Node.js server
-FileName: server.js
+Discription: The  kernel of the Node.js httpServer
+FileName: httpServer.js
 Project: Karmax
 Programmer: Zhendong Tang (Mike)
 Date      : Jan 30, 2020
@@ -12,31 +12,47 @@ const body=require('koa-better-body');
 const path=require('path');
 const session=require('koa-session');
 const fs=require('fs');
-const ejs=require('koa-ejs');
+const ejs=require('koa-ejs'); 
 const config=require('../config');
+const websocket=require('socket.io');  // websocket
+//===================httpServer===============================
+let httpServer=new Koa();
+httpServer.listen(config.PORT);
+console.log(`httpServer is running at ${config.PORT}!`);
+//===================Websocket================================
+let wsServer=websocket.listen(httpServer)
+wsServer.on('connection',(sock)=>{
+    sock.on('a',(num1,num2)=>{
+        console.log(num1,num2);
 
-let server=new Koa();
-server.listen(config.PORT);
-console.log(`erver is running at ${config.PORT}!`);
+    })
+});
+
+
+
+
 
 // middleWare:  better-body
-server.use(body({
+// here to setup the upload file directory
+httpServer.use(body({
     uploadDir: path.resolve(__dirname,'../static/upload')
 }));
 
 // middleware: session
-server.keys=fs.readFileSync('../libs/.keys').toString().split('\n');
-//console.log(server.keys);
-server.use(session({
+httpServer.keys=fs.readFileSync('../libs/.keys').toString().split('\n');
+//console.log(httpServer.keys);
+httpServer.use(session({
     maxAge:60*1000, // duration
     renew:  true    // if renew session
-},server));
-// Bind Database and Config to CTX
-server.context.db=require('../libs/database');//add db as a property
-server.context.config=config;// add config as a property
-// Render
+},httpServer));
 
-ejs(server,{
+// Bind Database and Config to CTX
+httpServer.context.db=require('../libs/database');//add db as a property
+httpServer.context.config=config;// add config as a property
+
+// Server side Render
+
+ejs(httpServer,{
     root:path.resolve(__dirname,'../template'),
     layout:false,
     viewExt:'ejs',
@@ -71,4 +87,13 @@ router.use('/',require('../routers/www'));
 static(router,{
    html:365 // 传入一个时间段
 });  // 从外面引用，并在这里传一个ROUTER给它
-server.use(router.routes());// must have
+
+
+
+
+
+
+
+httpServer.use(router.routes());// must have
+
+
