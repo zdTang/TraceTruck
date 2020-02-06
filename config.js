@@ -14,7 +14,7 @@ module.exports={
         DB_NAME: '20181101',
       
         //Encryption
-        ADMIN_SUBFIX: '_?:L$"OPUIOSIFJ(*UPT:LKRFG',
+        ADMIN_SUFFIX: '_?:L$"OPUIOSIFJ(*UPT:LKRFG',
 
         //Server
         HTTP_ROOT:'http://localhost:9000',
