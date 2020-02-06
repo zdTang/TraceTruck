@@ -15,6 +15,7 @@
     "noa": "^0.0.3"
   },
   "devDependencies": {
+    "crypto": "^1.0.1",
     "koa-static": "^5.0.0",
     "nodemon": "^2.0.2",
     "socket.io": "^2.3.0"

@@ -55,14 +55,15 @@ router.post('/login',async ctx=>{
 
     let admin=findAdmin(username);
 
+    // The default Admin account is :   root,   password: 123456
 
     if(!admin){
        // ctx.body='no this user';
       ctx.redirect(`${HTTP_ROOT}/admin/login?errmsg=${encodeURIComponent('User not exist!')}`); // TO HIDE THE MESSAGE
       //ctx.redirect(`${HTTP_ROOT}/admin/login?errmsg=用户不存在}`); // TO HIDE THE MESSAGE
-    }else if(admin.password!=common.md5(password+ctx.config.ADMIN_PREFIX)){
+    }else if(admin.password!=common.md5(password+ctx.config.ADMIN_SUFFIX)){
         console.log(admin.password);
-        console.log(common.md5(password+ctx.config.ADMIN_PREFIX));
+        console.log(common.md5(password+ctx.config.ADMIN_SUFFIX));
       ctx.redirect(`${HTTP_ROOT}/admin/login?errmsg=${encodeURIComponent('Wrong Password!!')}`); //
     }else{
         ctx.body=" you are in...";
