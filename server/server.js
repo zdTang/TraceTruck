@@ -19,38 +19,12 @@ let server=new Koa();
 server.listen(config.PORT);
 console.log(`erver is running at ${config.PORT}!`);
 
-// middleWare:  better-body
-server.use(body({
-    uploadDir: path.resolve(__dirname,'../static/upload')
-}));
-
-// middleware: session
-server.keys=fs.readFileSync('../libs/.keys').toString().split('\n');
-//console.log(server.keys);
-server.use(session({
-    maxAge:60*1000, // duration
-    renew:  true    // if renew session
-},server));
-// Bind Database and Config to CTX
-server.context.db=require('../libs/database');//add db as a property
-server.context.config=config;// add config as a property
-// Render
-
-ejs(server,{
-    root:path.resolve(__dirname,'../template'),
-    layout:false,
-    viewExt:'ejs',
-    cache:false,
-    debug:false
-})
+/*============================================================================*/
+// Description:   Error Handler                                                //
+// uncomment the following code only in production environment                 //
+/*============================================================================ */
 
 
-
-
-let router=new Router();
-
-// Handel error   // the following code is used only on PROD Version
-/*==================================================================== */
 // router.use(async (ctx,next)=>{
 // try{
 // await next();//  will try all of the consequent processing
@@ -63,12 +37,73 @@ let router=new Router();
 // }
 // });
 
-// create 3 routers here
-router.use('/admin',require('../routers/admin'));
-router.use('/api',require('../routers/api'));
+/*================================================= */
+// packageName:   'better-body'                      //
+// Description:   parse POST formData and body data  //
+// used for parseing POST Request                    //
+/*================================================== */
+server.use(body({
+    // this directory is for upload file
+    uploadDir: path.resolve(__dirname,'../static/upload')
+}));
+
+/*================ Session Module =============== */
+// packageName:    'session'                      //
+// to set up session parameters                   //
+/*=============================================== */
+
+server.keys=fs.readFileSync('../libs/.keys').toString().split('\n');   // keys for encrypting session
+
+server.use(session({
+    maxAge:60*1000, // duration  TODO:  use config file 
+    renew:  true    // if renew session
+},server));
+
+/*================================================================== */
+// Description: Bind modules to Koa context prototype                //
+// List:                                                             //
+// 1.   db ===> mysql                                                //
+// 2.   config  ==> config.json file                                 //
+/*================================================================== */
+
+server.context.db=require('../libs/database');      //add db as a property
+server.context.config=config;                       // add config as a property
+
+
+
+/*================================================================== */
+// Description: Server side render                                   //
+// Here to customize EJS server side render                          //
+// package :  'ejs'                                                  //
+//                                                                   //
+/*================================================================== */
+ejs(server,{
+    root:path.resolve(__dirname,'../template'),  // directory for template file
+    layout:false,
+    viewExt:'ejs',
+    cache:false,
+    debug:false
+})
+
+/*================================================================== */
+// Description: Create Router                                        //
+// Package Name:  "koa-router"                                       //
+/*================================================================== */
+
+let router=new Router();
+
+router.use('/admin',require('../routers/admin'));      //  'host/admin'
+router.use('/api',require('../routers/api'));          //  'host/api'
 router.use('/',require('../routers/www'));
-// for static files
-static(router,{
-   html:365 // 传入一个时间段
-});  // 从外面引用，并在这里传一个ROUTER给它
+/*================================================================== */
+// Description: Static files Router  
+//              put this static file router as the last one          //
+// Package Name:  "koa-static"                                       //
+/*================================================================== */
+static(router,
+    {
+       html:365 // give it a duration
+    }); 
+
+
 server.use(router.routes());// must have
