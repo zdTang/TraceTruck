@@ -1,6 +1,6 @@
 /*====================================================================
-Discription: The  kernel of the Node.js server
-FileName: server.js
+Discription: The  kernel of the Node.js app
+FileName: app.js
 Project: Karmax
 Programmer: Zhendong Tang (Mike)
 Date      : Jan 30, 2020
@@ -8,14 +8,20 @@ Date      : Jan 30, 2020
 const Koa=require('koa');
 const Router=require('koa-router');
 const static=require('../routers/static')
-const body=require('koa-better-body');
+const body=require('koa-better-body');                 // for POST request parsing
 const path=require('path');
 const session=require('koa-session');
+//const fs=require('await-fs');                          // file IO
 const fs=require('fs');
 const ejs=require('koa-ejs');
 const config=require('../config');
+const io=require('socket.io'); 
+const http=require('http');                        // websocket
 
-let server=new Koa();
+const app=new Koa();
+const server = http.createServer(app.callback());
+const ws=io(server);
+
 server.listen(config.PORT);
 console.log(`erver is running at ${config.PORT}!`);
 
@@ -42,7 +48,7 @@ console.log(`erver is running at ${config.PORT}!`);
 // Description:   parse POST formData and body data  //
 // used for parseing POST Request                    //
 /*================================================== */
-server.use(body({
+app.use(body({
     // this directory is for upload file
     uploadDir: path.resolve(__dirname,'../static/upload')
 }));
@@ -52,12 +58,12 @@ server.use(body({
 // to set up session parameters                   //
 /*=============================================== */
 
-server.keys=fs.readFileSync('../libs/.keys').toString().split('\n');   // keys for encrypting session
+app.keys=fs.readFileSync('../libs/.keys').toString().split('\n');   // keys for encrypting session
 
-server.use(session({
+app.use(session({
     maxAge:60*1000, // duration  TODO:  use config file 
     renew:  true    // if renew session
-},server));
+},app));
 
 /*================================================================== */
 // Description: Bind modules to Koa context prototype                //
@@ -66,18 +72,18 @@ server.use(session({
 // 2.   config  ==> config.json file                                 //
 /*================================================================== */
 
-server.context.db=require('../libs/database');      //add db as a property
-server.context.config=config;                       // add config as a property
+app.context.db=require('../libs/database');      //add db as a property
+app.context.config=config;                       // add config as a property
 
 
 
 /*================================================================== */
 // Description: Server side render                                   //
-// Here to customize EJS server side render                          //
+// Here to customize EJS app side render                          //
 // package :  'ejs'                                                  //
 //                                                                   //
 /*================================================================== */
-ejs(server,{
+ejs(app,{
     root:path.resolve(__dirname,'../template'),  // directory for template file
     layout:false,
     viewExt:'ejs',
@@ -106,4 +112,32 @@ static(router,
     }); 
 
 
-server.use(router.routes());// must have
+/*================================================================== */
+// Description: websocket                                            //
+// Package Name:  "socket.io"                                        //
+/*================================================================== */
+
+//TODO:   
+    ws.on('connection', socket=>{
+
+        console.log('a user connected');
+        
+        //响应某用户发送消息
+        socket.on('chat message', msg=>{
+        console.log('chat message:' + msg);
+            
+        // 广播给所有人
+        ws.emit('chat message', msg);
+        // 广播给除了发送者外所有人
+        // socket.broadcast.emit('chat message', msg)
+        });  
+      
+        socket.on('disconnect', ()=>{
+        console.log('user disconnected');
+        });
+      });
+
+
+
+
+app.use(router.routes());// must have

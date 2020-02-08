@@ -10,6 +10,11 @@ const Router=require('koa-router');
 
 let router=new Router();
 
+// host/api/
+router.all("/",async ctx=>{
+       ctx.body=" API  ROOT ";
+})
+
 router.get('/login',async ctx=>{
     ctx.body='aaa';
 })

@@ -5,6 +5,9 @@ Project: Karmax
 Programmer: Zhendong Tang (Mike)
 Date      : Jan 30, 2020
 =====================================================================*/
+
+// Make sure to install 'crypto' package
+
 const crypto=require('crypto');
 
 module.exports={
