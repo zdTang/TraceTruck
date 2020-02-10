@@ -10,8 +10,8 @@ module.exports={
        //Database 
         DB_HOST: 'localhost',
         DB_USER: 'root',
-        DB_PASS: '',
-        DB_NAME: '20181101',
+        DB_PASS: 'mysql',
+        DB_NAME: 'flos',
       
         //Encryption
         ADMIN_SUFFIX: '_?:L$"OPUIOSIFJ(*UPT:LKRFG',

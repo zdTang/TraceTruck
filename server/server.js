@@ -126,9 +126,15 @@ static(router,
         socket.on('chat message', msg=>{
         console.log('chat message:' + msg);
             
-        // 广播给所有人
-        ws.emit('chat message', msg);
-        // 广播给除了发送者外所有人
+        // broadcast to everyone
+        var oneSecond = 1000 * 1; // one second = 1000 x 1 ms
+        setInterval(function() {
+            let data=(new Date()).getSeconds();
+            ws.emit('chat message', `GPS DATA From Server==${data}`);
+            console.log(`sending message: ${data}`);
+        }, oneSecond);
+        //ws.emit('chat message', msg);
+        //broadcasting to everyone but not for  the sender
         // socket.broadcast.emit('chat message', msg)
         });  
       
