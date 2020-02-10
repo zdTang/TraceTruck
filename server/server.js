@@ -1,6 +1,6 @@
 /*====================================================================
-Discription: The  kernel of the Node.js app
-FileName: app.js
+Discription: The  kernel of the Node.js httpServer
+FileName: httpServer.js
 Project: Karmax
 Programmer: Zhendong Tang (Mike)
 Date      : Jan 30, 2020
@@ -13,7 +13,7 @@ const path=require('path');
 const session=require('koa-session');
 //const fs=require('await-fs');                          // file IO
 const fs=require('fs');
-const ejs=require('koa-ejs');
+const ejs=require('koa-ejs'); 
 const config=require('../config');
 const io=require('socket.io'); 
 const http=require('http');                        // websocket
